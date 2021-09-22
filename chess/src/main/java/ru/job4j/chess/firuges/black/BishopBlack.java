@@ -18,13 +18,72 @@ public class BishopBlack implements Figure {
 
     @Override
     public Cell[] way(Cell dest) {
-        throw new ImpossibleMoveException(
-                String.format("Could not way by diagonal from %s to %s", position, dest)
-        );
+        if (!isDiagonal(position, dest)) {
+            throw new ImpossibleMoveException(String.format("Could not move by diagonal from %s to %s", position, dest));
+        }
+        int size = dest.getX() > position.getX() ? dest.getX() - position.getX() : position.getX() - dest.getX();
+        Cell[] steps = new Cell[size];
+        int deltaX = position.getX();
+        int deltaY = position.getY();
+        if (deltaX > dest.getX()) {
+            if (deltaY > dest.getY()) {
+                for (int index = 0; index < size; index++) {
+                    deltaX -= 1;
+                    deltaY -= 1;
+                    steps[index] = Cell.findBy(deltaX, deltaY);
+                }
+            } else {
+                for (int index = 0; index < size; index++) {
+                    deltaX -= 1;
+                    deltaY += 1;
+                    steps[index] = Cell.findBy(deltaX, deltaY);
+                }
+            }
+        } else {
+            if (deltaY > dest.getY()) {
+                for (int index = 0; index < size; index++) {
+                    deltaX += 1;
+                    deltaY -= 1;
+                    steps[index] = Cell.findBy(deltaX, deltaY);
+                }
+            } else {
+                for (int index = 0; index < size; index++) {
+                    deltaX += 1;
+                    deltaY += 1;
+                    steps[index] = Cell.findBy(deltaX, deltaY);
+                }
+            }
+        }
+        return steps;
     }
 
     public boolean isDiagonal(Cell source, Cell dest) {
-        return false;
+        boolean rsl = false;
+        for (int x = source.getX(),  y = source.getY(); x <= dest.getX() && y <= dest.getY(); x++, y++) {
+            if (Cell.findBy(x, y) == dest) {
+                rsl = true;
+                break;
+            }
+        }
+        for (int x = source.getX(),  y = source.getY(); x >= dest.getX() && y <= dest.getY(); x--, y++) {
+            if (Cell.findBy(x, y) == dest) {
+                rsl = true;
+                break;
+            }
+        }
+        for (int x = source.getX(),  y = source.getY(); x >= dest.getX() && y >= dest.getY(); x--, y--) {
+            if (Cell.findBy(x, y) == dest) {
+                rsl = true;
+                break;
+            }
+        }
+        for (int x = source.getX(),  y = source.getY(); x <= dest.getX() && y >= dest.getY(); x++, y--) {
+            if (Cell.findBy(x, y) == dest) {
+                rsl = true;
+                break;
+            }
+        }
+        return rsl;
     }
 
     @Override
