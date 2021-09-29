@@ -6,8 +6,6 @@ import org.junit.Test;
 import ru.job4j.chess.firuges.Cell;
 import ru.job4j.chess.firuges.Figure;
 
-
-
 public class BishopBlackTest extends TestCase {
 
     @Test
